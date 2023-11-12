@@ -2,14 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import ImageFetch from "../components/ImageFetch";
 import ImageComponent from "../components/ImageComponent";
-import { encodeImageToBlurhash, loadImage } from "../blurhash"
-import sharp from 'sharp'
-import type { Sharp } from "sharp";
-import {Blurhash} from 'react-blurhash'
-//@ts-ignore
-import request from 'request'
-//@ts-ignore
-import getPixels from 'get-pixels'
+import { encodeImageToBlurhash } from "../blurhash"
+import { Image } from 'astro:assets';
 
 
 const imageSrc = "https://loremflickr.com/320/240"
@@ -55,6 +49,8 @@ const hash = await encodeImageToBlurhash(imageSrc);
         </p>
         <ul role="list" class="link-card-grid">
 			<ImageComponent src={imageSrc} hash={hash} client:load/>
+			<!-- <img src={'https://loremflickr.com/320/240'} alt="" loading="lazy" decoding="async">
+			<Image width={300} height={300} src={'https://loremflickr.com/320/240'} alt="A description of my image."/> -->
         </ul>
     </main>
 </Layout>
