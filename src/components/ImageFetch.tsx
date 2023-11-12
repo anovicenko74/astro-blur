@@ -7,7 +7,6 @@ interface ImageFetchProps {}
 const loadImage = async (src: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = "Anonymous";
         img.onload = () => resolve(img);
         img.onerror = (...args) => reject(args);
         img.src = src;
@@ -30,8 +29,19 @@ const encodeImageToBlurhash = async (imageUrl: string) => {
 
 const ImageFetch: FunctionComponent<ImageFetchProps> = () => {
     const [imageHash, setImageHash] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     useEffect(() => {
+        const loadImage = async () => {
+            const res = await fetch("https://loremflickr.com/320/240");
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            return url;
+        };
+        loadImage().then((url) => {
+            setImageUrl(url);
+        });
+
         encodeImageToBlurhash("https://loremflickr.com/320/240").then((hash) =>
             setImageHash(hash)
         );
@@ -49,6 +59,7 @@ const ImageFetch: FunctionComponent<ImageFetchProps> = () => {
                     punch={1}
                 />
             )}
+            {imageUrl && <img src={imageUrl} />}
         </>
     );
 };
